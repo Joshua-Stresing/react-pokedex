@@ -1,9 +1,8 @@
 import './App.css';
 
-import Header from './components/Layout/Header';
+import Header from 'C:/Users/pyrot/alchemy/Quarter-2/react-pokedex/src/components/Layout/Header/Header.js';
 import Main from './Views/Main/Main';
-import Footer from './components/Layout/Footer';
-
+import Footer from 'C:/Users/pyrot/alchemy/Quarter-2/react-pokedex/src/components/Layout/Footer/Footer.js';
 
 function App() {
   return (
@@ -14,6 +13,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
