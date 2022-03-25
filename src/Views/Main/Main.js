@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Main.css';
-import { fetchPokemon } from '../../services/pokemon/pokefetch';
+import { fetchPokemon } from '../../services/pokemon/fetchpokemon';
 
 
 
