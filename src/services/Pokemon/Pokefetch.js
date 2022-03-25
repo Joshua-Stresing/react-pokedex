@@ -1,5 +1,10 @@
 export async function fetchPokemon() {
-  const resp = await fetch ('https://pokedex-alchemy.herokuapp.com/api/pokedex');
+
+  const params = new URLSearchParams();
+
+  const resp = await fetch (`https://pokedex-alchemy.herokuapp.com/api/pokedex?${params.toString()}&perPage=10`);
   const data = await resp.json();
+
   console.log(data);
+  return data.results;
 }
