@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Main.css';
-import { fetchPokemon, fetchTypes } from '../../services/pokemon/fetchpokemon';
+import { fetchPokemon, fetchTypes, filterTypes } from '../../services/pokemon/fetchpokemon';
 import Filter from '../../components/Controls/Filter/Filter';
 
 
@@ -8,7 +8,7 @@ import Filter from '../../components/Controls/Filter/Filter';
 export default function Main() {
 
   const [pokemon, setPokemon] = useState([]);
-  const [types, setTypes] = useState('');
+  const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState('ALL');
   const [error, setError] = useState('');
 
@@ -17,7 +17,7 @@ export default function Main() {
   useEffect(() =>{
     const fetchData = async () => {
       const typesData = await fetchTypes();
-      setTypes(['all', ...typesData]);
+      setTypes(['All', ...typesData]);
     };
     fetchData();
   }, []);
@@ -36,22 +36,35 @@ export default function Main() {
     fetchData();
   }, []);
 
-
+  useEffect(() =>{
+    const chosenType = async () => {
+      const matchedTypes = await filterTypes(selectedType);
+      setPokemon(matchedTypes);
+    };
+    if (selectedType) {
+      chosenType();
+    }
+  }, [selectedType]);
+  
   return (
-    <div className='Pokemon'>
-
-      <h1>Pokemon</h1>
-      {error && <p>{error}</p>}
-      { pokemon.map((pokemon) => (
-        <div key={pokemon.id}>
-          <h3>{pokemon.pokemon}</h3>
-          <img src={pokemon.url_image}></img>
-          <p>HP: {pokemon.hp} / Speed: {pokemon.speed}</p>
-          <p>Attack: {pokemon.attack} / Defense: {pokemon.defense}</p>
-          <p>Special Attack: {pokemon.special_attack} / Special Defense: {pokemon.special_defense}</p>
-          <p>Type 1: {pokemon.type_1} / Type 2: {pokemon.type_2}</p>
-        </div>
-      )) }
-    </div>
+    <>
+      <div>
+        <Filter types={types} setSelectedType={setSelectedType}/>
+      </div>
+      <div className='Pokemon'>
+        <h1>Pokemon</h1>
+        {error && <p>{error}</p>}
+        { pokemon.map((pokemon) => (
+          <div key={pokemon.id}>
+            <h3>{pokemon.pokemon}</h3>
+            <img src={pokemon.url_image}></img>
+            <p>HP: {pokemon.hp} / Speed: {pokemon.speed}</p>
+            <p>Attack: {pokemon.attack} / Defense: {pokemon.defense}</p>
+            <p>Special Attack: {pokemon.special_attack} / Special Defense: {pokemon.special_defense}</p>
+            <p>Type 1: {pokemon.type_1} / Type 2: {pokemon.type_2}</p>
+          </div>
+        )) }
+      </div>
+    </>
   );
 }

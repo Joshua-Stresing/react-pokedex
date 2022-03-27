@@ -18,7 +18,6 @@ export async function fetchTypes() {
 export async function filterTypes(type) {
   const params = new URLSearchParams();
 
-    
   if (
     type !== 'All'
   ){
