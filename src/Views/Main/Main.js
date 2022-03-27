@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import './Main.css';
-import { fetchPokemon } from '../../services/pokemon/fetchpokemon';
+import { fetchPokemon, fetchTypes } from '../../services/pokemon/fetchpokemon';
+import Filter from '../../components/Controls/Filter/Filter';
 
 
 
 export default function Main() {
 
   const [pokemon, setPokemon] = useState([]);
+  const [types, setTypes] = useState('');
+  const [selectedType, setSelectedType] = useState('ALL');
   const [error, setError] = useState('');
+
+  // const types = ['All', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
+  
+  useEffect(() =>{
+    const fetchData = async () => {
+      const typesData = await fetchTypes();
+      setTypes(['all', ...typesData]);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,8 +36,10 @@ export default function Main() {
     fetchData();
   }, []);
 
+
   return (
     <div className='Pokemon'>
+
       <h1>Pokemon</h1>
       {error && <p>{error}</p>}
       { pokemon.map((pokemon) => (
