@@ -18,7 +18,7 @@ export async function filterTypes(type, search, direction) {
   params.set('sort', 'pokemon');
   params.set('direction', direction);
   
-  if (type !== 'All'){
+  if (type !== 'all'){
     params.set('type', type);      
   }
   if (search) {

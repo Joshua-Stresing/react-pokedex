@@ -9,7 +9,7 @@ export default function Main() {
 
   const [pokemon, setPokemon] = useState([]);
   const [types, setTypes] = useState([]);
-  const [selectedType, setSelectedType] = useState('ALL');
+  const [selectedType, setSelectedType] = useState('all');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -18,7 +18,7 @@ export default function Main() {
   useEffect(() =>{
     const fetchData = async () => {
       const typesData = await fetchTypes();
-      setTypes(['All', ...typesData]);
+      setTypes(['all', ...typesData]);
       
     };
     fetchData();
@@ -49,7 +49,7 @@ export default function Main() {
   }, [selectedType, order]);
 
   const pokeSearch = async () => {
-    const data = await filterTypes(selectedType, search);
+    const data = await filterTypes(selectedType, search, order);
     setPokemon(data);
   };
 
