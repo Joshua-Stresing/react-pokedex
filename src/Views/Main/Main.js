@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './Main.css';
 import { fetchPokemon, fetchTypes, filterTypes } from '../../services/pokemon/fetchpokemon';
 import Filter from '../../components/Controls/Filter/Filter';
-
-
+import SearchBar from '../../components/Controls/Search/Search';
+import Order from '../../components/Controls/Order/Order';
 
 export default function Main() {
 
@@ -11,13 +11,15 @@ export default function Main() {
   const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState('ALL');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [order, setOrder] = useState('');
 
-  // const types = ['All', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
-  
   useEffect(() =>{
     const fetchData = async () => {
       const typesData = await fetchTypes();
       setTypes(['All', ...typesData]);
+      
     };
     fetchData();
   }, []);
@@ -28,7 +30,7 @@ export default function Main() {
       try {
         const data = await fetchPokemon();
         setPokemon(data);
-
+        setLoading(false);
       } catch (error) {
         setError(error.message);
       }
@@ -38,16 +40,32 @@ export default function Main() {
 
   useEffect(() =>{
     const chosenType = async () => {
-      const matchedTypes = await filterTypes(selectedType);
+      const matchedTypes = await filterTypes(selectedType, null, order);
       setPokemon(matchedTypes);
     };
     if (selectedType) {
       chosenType();
     }
-  }, [selectedType]);
-  
+  }, [selectedType, order]);
+
+  const pokeSearch = async () => {
+    const data = await filterTypes(selectedType, search);
+    setPokemon(data);
+  };
+
+  if (loading) return <div className="wrapper">
+    <div className="pokeball">
+    </div>
+  </div>;
+
+
+
   return (
     <>
+      <>
+        <SearchBar query={search} setQuery={setSearch} searchSubmit={pokeSearch} />
+        <Order setOrder={setOrder}/>
+      </>
       <div>
         <Filter types={types} setSelectedType={setSelectedType}/>
       </div>
